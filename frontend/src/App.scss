@@ -1,0 +1,245 @@
+* {
+  box-sizing: border-box;
+}
+
+.header {
+  height: 80px;
+
+  .logo {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+  }
+}
+
+.container {
+  position: absolute;
+  top: 80px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  border-top: 1px solid #333;
+
+  .nav-container {
+    display: flex;
+    border-right: 1px solid #333;
+
+    .nav-content {
+      padding: 15px;
+      width: 300px;
+    }
+
+    .navbar {
+      border-right: 1px solid #333;
+      width: 100px;
+
+      ul {
+        margin: 10px 0;
+        padding: 0 5px;
+        list-style: none;
+
+        li {
+          padding: 2px;
+
+          a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 70px;
+            border-radius: 5px;
+            cursor: pointer;
+
+            &:hover {
+              transition: 0.5s;
+              background: #262528;
+            }
+
+            &.active {
+              background: #262528;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .page-content {
+    flex: 1;
+    position: relative;
+
+    .img-box {
+      position: absolute;
+      top: 100px;
+      left: 200px;
+      right: 200px;
+      bottom: 100px;
+      border: 2px solid #7EA849;
+      box-shadow: 0 0 10px  #7EA849;
+
+      #img_box {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      &::before {
+        content: 'Canvas';
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        color: #7EA849;
+      }
+    }
+  }
+}
+
+.btn-upload {
+  border: 1px solid #555;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.replace-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  .img-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    white-space: nowrap;
+  }
+}
+
+.btn-replace {
+  border: 1px solid #555;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.bring-box {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-bring {
+  border: 1px solid #555;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 10px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &.reverse svg {
+    transform: rotate(180deg);
+  }
+}
+
+.btn-remove-bg {
+  border: 1px solid #555;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+
+  span {
+    display: block;
+    margin-top: 10px;
+    color: #aaa;
+  }
+}
+
+input[type="text"] {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #b3cb95;
+  padding: 10px;
+  outline: none;
+  color: #ddd;
+  border-radius: 5px;
+  background: transparent;
+}
+
+.tr-transform__rotator {
+  top: -45px;
+  left: calc(50% - 7px);
+}
+
+.tr-transform__rotator,
+.tr-transform__scale-point {
+  background: #fff;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  position: absolute;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.tr-transform__rotator:hover,
+.tr-transform__scale-point:hover{
+  background: #F1F5F8;
+}
+.tr-transform__rotator:active,
+.tr-transform__scale-point:active{
+  background: #DAE1E7;
+}
+.tr-transform__scale-point {
+
+}
+
+.tr-transform__scale-point--tl {
+  top: -7px;
+  left: -7px;
+}
+
+.tr-transform__scale-point--ml {
+  top: calc(50% - 7px);
+  left: -7px;
+}
+
+.tr-transform__scale-point--tr {
+  left: calc(100% - 7px);
+  top: -7px;
+}
+
+.tr-transform__scale-point--tm {
+  left: calc(50% - 7px);
+  top: -7px;
+}
+
+.tr-transform__scale-point--mr {
+  left: calc(100% - 7px);
+  top: calc(50% - 7px);
+}
+
+.tr-transform__scale-point--bl {
+  left: -7px;
+  top: calc(100% - 7px);
+}
+
+.tr-transform__scale-point--bm {
+  left: calc(50% - 7px);
+  top: calc(100% - 7px);
+}
+
+.tr-transform__scale-point--br {
+  left: calc(100% - 7px);
+  top: calc(100% - 7px);
+}
