@@ -1,29 +1,48 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {GoCloudUpload} from "react-icons/go";
+import AWS from 'aws-sdk';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const Assets = () => {
-  const [uploadImage, setUploadImage] = useState();
-  const [image, setImage] = useState();
-  const [maskImage, setMaskImage] = useState();
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
+    secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
+    region: process.env.REACT_APP_S3_BUCKET_REGION
+  });
 
-  function handleChange(e) {
-    console.log(e.target.files);
-    setUploadImage(URL.createObjectURL(e.target.files[0]));
-    // var formData = new FormData();
-    // formData.append("image", e.target.files[0]);
-    // axios({
-    //   method: "post",
-    //   url: "http://localhost:3000/remove-bg",
-    //   data: formData,
-    // })
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     setImage(response.data.image);
-    //     setMaskImage(response.data.mask);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+  const [listFiles, setListFiles] = useState([]);
+
+  const listParams = {
+    Bucket: process.env.REACT_APP_S3_BUCKET_NAME,
+    Delimiter: '',
+  };
+
+  useEffect(() => {
+    s3.listObjectsV2(listParams, (err, data) => {
+      if (err) {
+        console.log(err, err.stack);
+      } else {
+        setListFiles(data.Contents);
+        console.log(data.Contents);
+      }
+    });
+  }, []);
+
+  async function handleChange(e) {
+    const file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+    const params = {
+      Bucket: process.env.REACT_APP_S3_BUCKET_NAME,
+      Key: `${Date.now()}.${file.name}`,
+      Body: file,
+      ContentType: 'image/png',
+      ContentDisposition: 'inline'
+    };
+    const {Location} = await s3.upload(params).promise();
+    console.log(Location);
   }
 
   return (
@@ -40,6 +59,16 @@ const Assets = () => {
       </label>
 
       <h4>Library</h4>
+      <ul className="image-list">
+        {listFiles && listFiles.map((name, index) => (
+          <li key={index}>
+            <LazyLoadImage
+              effect="blur"
+              src={"https://s3.us-east-2.amazonaws.com/webdesigned.ai/" + name.Key}
+              />
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
