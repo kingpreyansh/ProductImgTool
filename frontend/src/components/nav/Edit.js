@@ -6,9 +6,9 @@ import {MdOutlineLayers} from "react-icons/md";
 const Edit = (props) => {
   const [filename, setFilename] = useState('');
 
-  function handleChange(e) {
+  function onReplaceImg(e) {
     setFilename(e.target.files[0].name);
-    props.onChangeImg(e.target.files[0]);
+    props.onReplaceImg(URL.createObjectURL(e.target.files[0]));
   }
 
   function onRemoveBg() {
@@ -17,6 +17,14 @@ const Edit = (props) => {
 
   function onDownload() {
     props.onDownload();
+  }
+
+  const onBringToFront = () => {
+    props.onBringToFront();
+  }
+
+  const onSendToBack = () => {
+    props.onSendToBack();
   }
 
   return (
@@ -28,22 +36,21 @@ const Edit = (props) => {
             <BiImageAlt/> {filename}
           </span>
         }
+        {!filename && <span></span>}
         <label>
           <input
             style={{display: "none"}}
             type="file"
             accept={"image/*"}
-            onChange={handleChange}
+            onChange={onReplaceImg}
           />
-          <a className="btn-replace">
-            {filename ? 'Replace' : 'Insert'}
-          </a>
+          <a className="btn-replace">Replace</a>
         </label>
       </div>
       <h4 style={{marginBottom: 10}}>Arrange</h4>
       <div className="bring-box">
-        <a className="btn-bring"><MdOutlineLayers fontSize={24}/> Bring to Front</a>
-        <a className="btn-bring reverse"><MdOutlineLayers fontSize={24}/> Send to Back</a>
+        <a className="btn-bring" onClick={onBringToFront}><MdOutlineLayers fontSize={24}/> Bring to Front</a>
+        <a className="btn-bring reverse" onClick={onSendToBack}><MdOutlineLayers fontSize={24}/> Send to Back</a>
       </div>
       <h4 style={{marginBottom: 10}}>Tools</h4>
       <div className="btn-remove-bg" onClick={onRemoveBg}>

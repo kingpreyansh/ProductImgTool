@@ -31,13 +31,23 @@ const Navbar = (props) => {
         </ul>
       </div>
 
-      {idx === 0 && <Assets/>}
+      {idx === 0 &&
+        <Assets
+          assetList={props.assetList}
+          loaded={props.loaded}
+          onUploadAssets={(fileList) => props.onUploadAssets(fileList)}
+          onDeleteAsset={(index, key) => props.onDeleteAsset(index, key)}
+          onInsertImg={(img) => props.onInsertImg(img)}
+        />
+      }
       {idx === 1 && <Generate/>}
       {idx === 2 &&
         <Edit
-          onChangeImg={(img) => props.onChangeImg(img)}
+          onReplaceImg={(img) => props.onReplaceImg(img)}
           onRemoveBg={() => props.onRemoveBg()}
           onDownload={() => props.onDownload()}
+          onBringToFront={() => props.onBringToFront()}
+          onSendToBack={() => props.onSendToBack()}
         />
       }
     </div>
