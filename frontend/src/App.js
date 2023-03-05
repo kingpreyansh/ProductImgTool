@@ -54,7 +54,7 @@ function App() {
   const onRemoveBg = async () => {
     if (imgList[selectedKey]) {
       var formData = new FormData();
-      const response = await fetch(imgList[selectedKey] + "?notcache");
+      const response = await fetch(imgList[selectedKey] + "?" + Date.now());
       const data = await response.blob();
       const file = new File([data], imgList[selectedKey], {
         type: 'image/jpeg',
@@ -207,7 +207,8 @@ function App() {
                     disableScale={false}
                   >
                     <img
-                      src={imgList[index] + "?notcache"}
+                      src={imgList[index] + "?" + Date.now()}
+                      crossOrigin="anonymous"
                       style={{
                         ...transformList[index]
                       }}
