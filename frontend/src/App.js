@@ -6,6 +6,8 @@ import axios from "axios";
 import FreeTransform from 'react-free-transform'
 import * as htmlToImage from 'html-to-image';
 import AWS from "aws-sdk";
+import {FaTimesCircle} from "react-icons/fa";
+import {CircularProgress} from "react-loading-indicators";
 
 function App() {
   const s3 = new AWS.S3({
@@ -21,14 +23,15 @@ function App() {
 
   const [assetList, setAssetList] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [imgList, setImgList] = useState([]);
   const [selectedKey, setSelectedKey] = useState(-1);
   const [transformList, setTransformList] = useState([]);
   const [maxZIndex, setMaxZIndex] = useState(1);
   const transformInfo = {
-    x: 0,
-    y: 0,
+    x: 150,
+    y: 150,
     scaleX: 1,
     scaleY: 1,
     width: 300,
@@ -53,6 +56,8 @@ function App() {
 
   const onRemoveBg = async () => {
     if (imgList[selectedKey]) {
+      setLoading(true);
+
       var formData = new FormData();
       const response = await fetch(imgList[selectedKey] + "?" + Date.now());
       const data = await response.blob();
@@ -60,22 +65,25 @@ function App() {
         type: 'image/jpeg',
       });
       formData.append("image", file);
+
       axios({
         method: "post",
         url: "http://localhost:3000/remove-bg",
         data: formData,
       })
-        .then((response) => {
+        .then(async (response) => {
           const temp = imgList[selectedKey].split("/");
           const key = temp[temp.length - 1];
-          doUpload(key + '_result.png', response.data.image);
-          doUpload(key + '_mask.png', response.data.mask);
+          await doUpload(key + '_result.png', response.data.image);
+          await doUpload(key + '_mask.png', response.data.mask);
 
           const tmp = [...imgList];
           tmp[selectedKey] = response.data.image;
           setImgList(tmp);
+          setLoading(false);
         })
         .catch((error) => {
+          setLoading(false);
           console.log(error);
         });
     }
@@ -157,6 +165,17 @@ function App() {
     }
   }
 
+  const onDelete = (index) => {
+    console.log(index);
+    let tmp = [...imgList];
+    tmp.splice(index, 1);
+    setImgList(tmp);
+
+    let tmp2 = [...transformList];
+    tmp2.splice(index, 1);
+    setTransformList(tmp2);
+  }
+
   const onDeleteAsset = (index, key) => {
     s3.deleteObject({Bucket: process.env.REACT_APP_S3_BUCKET_NAME, Key: key}, (err, data) => {
       let tmp = [...assetList];
@@ -190,6 +209,9 @@ function App() {
         />
         <div className="page-content">
           <div className="img-box">
+            {loading &&
+              <CircularProgress variant="disc" color="#32cd32" size="medium" text="" textColor=""/>
+            }
             <div id="img_box">
               {imgList && imgList.map((item, index) => (
                 <div
@@ -206,13 +228,16 @@ function App() {
                     classPrefix="tr"
                     disableScale={false}
                   >
-                    <img
-                      src={imgList[index] + "?" + Date.now()}
-                      crossOrigin="anonymous"
-                      style={{
-                        ...transformList[index]
-                      }}
-                    />
+                    <div>
+                      <a className="btn-remove" onClick={() => onDelete(index)}><FaTimesCircle color="red"/></a>
+                      <img
+                        src={imgList[index] + "?" + Date.now()}
+                        crossOrigin="anonymous"
+                        style={{
+                          ...transformList[index]
+                        }}
+                      />
+                    </div>
                   </FreeTransform>
                 </div>
               ))}

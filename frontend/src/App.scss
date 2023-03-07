@@ -13,6 +13,14 @@
   }
 }
 
+.btn-remove {
+  position: absolute;
+  cursor: pointer;
+  display: none;
+  right: 5px;
+  top: -25px;
+}
+
 .container {
   position: absolute;
   top: 80px;
@@ -47,11 +55,8 @@
           }
 
           .btn-remove {
-            position: absolute;
             right: 5px;
             top: 5px;
-            cursor: pointer;
-            display: none;
           }
 
           img {
@@ -212,11 +217,21 @@ input[type="text"] {
   background: transparent;
 }
 
-.img {
+.disc-bounding-box {
   position: absolute;
-  z-index: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999999;
+}
+
+.img {
 
   &.img-active {
+    .btn-remove {
+      display: block;
+    }
+
     .tr-transform__rotator {
       top: -45px;
       left: calc(50% - 7px);
