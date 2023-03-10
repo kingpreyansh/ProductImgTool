@@ -50,7 +50,6 @@ def removeBg(imagePath):
     except:
         return "---Empty image---"
 
-
     unique_filename = sys.argv[2]
     cv2.imwrite(inputs_dir+unique_filename+'.jpg', img)
 
@@ -93,5 +92,5 @@ if torch.cuda.is_available():
 else:
     net.load_state_dict(torch.load(model_dir, map_location='cpu'))
 
-imgPath = sys.argv[1] 
+imgPath = sys.argv[1]
 print(removeBg(imgPath))
