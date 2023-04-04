@@ -26,3 +26,6 @@ torch==1.12
 torchvision==0.13.0
 typing-extensions==4.2.0
 Werkzeug==2.0.3
+
+Flask==2.2.3
+Flask-Cors==3.0.10
