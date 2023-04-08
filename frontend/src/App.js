@@ -75,7 +75,7 @@ function App() {
           const temp = imgList[selectedKey].split("/");
           const key = temp[temp.length - 1];
           await doUpload(key + '_result.png', response.data.image);
-          // await doUpload(key + '_mask.png', response.data.mask);
+          await doUpload(key + '_mask.png', response.data.mask);
 
           const tmp = [...imgList];
           tmp[selectedKey] = response.data.image;

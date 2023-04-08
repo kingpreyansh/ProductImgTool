@@ -26,10 +26,17 @@ const removeBg = async (req, res) => {
       console.log(response.data);
       const resultImage = Buffer.from(base64, "base64");
       writeFileSync(`${__dirname}/../public/results/${fileName}.png`, resultImage);
+      const original = sharp(`${__dirname}/../public/inputs/${fileName}.png`);
+      const originMeta = await original.metadata();
+      let resultImage = sharp(`${__dirname}/../public/results/${fileName}.png`);
+      const resultMeta = await resultImage.metadata();
+      if(originMeta.width != resultMeta.height || originMeta.height != resultMeta.height) {
+        resultImage = resultImage.rotate(90);
+      }
+      await resultImage.extractChannel("alpha").toFile(`${__dirname}/../public/masks/${fileName}.png`);
       // writeFileSync(`${__dirname}/../public/masks/${fileName}.png`, resultImage);
-      console.log(response.data);
-      // res.status(200).json({ image: `http://localhost:3000/results/${fileName}.png` , mask : `http://localhost:3000/masks/${fileName}.png` });
-      res.status(200).json({ image: `http://localhost:3000/results/${fileName}.png`});
+      res.status(200).json({ image: `http://localhost:3000/results/${fileName}.png` , mask : `http://localhost:3000/masks/${fileName}.png` });
+      // res.status(200).json({ image: `http://localhost:3000/results/${fileName}.png`});
     }).catch(function (error) {
       console.error(error);
       res.status(400).json({ message: "Something happened wrong" });
