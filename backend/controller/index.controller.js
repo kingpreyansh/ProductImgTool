@@ -21,14 +21,14 @@ const removeBg = async (req, res) => {
       data: data
     };
 
-    axios.request(options).then(function (response) {
+    axios.request(options).then(async function (response) {
       const base64 = response.data.image;
       console.log(response.data);
-      const resultImage = Buffer.from(base64, "base64");
+      let resultImage = Buffer.from(base64, "base64");
       writeFileSync(`${__dirname}/../public/results/${fileName}.png`, resultImage);
       const original = sharp(`${__dirname}/../public/inputs/${fileName}.png`);
       const originMeta = await original.metadata();
-      let resultImage = sharp(`${__dirname}/../public/results/${fileName}.png`);
+      resultImage = sharp(`${__dirname}/../public/results/${fileName}.png`);
       const resultMeta = await resultImage.metadata();
       if(originMeta.width != resultMeta.height || originMeta.height != resultMeta.height) {
         resultImage = resultImage.rotate(90);
