@@ -3,11 +3,6 @@ const routes = express.Router();
 
 const controller = require("../controller/index.controller");
 
-const upload = require("../services/image.upload");
-  
-
-routes.post("/remove-bg",upload.single('image'), controller.removeBg);
-
-
+routes.post("/remove-bg", controller.removeBg);
 
 module.exports = routes;
